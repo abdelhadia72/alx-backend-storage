@@ -1,9 +1,9 @@
--- Create stored procedure ComputeAverageWeightedScore
+-- Create stored procedure ComputeAverageWeightedScoreForUsers
 -- computes and stores the average weighted score for all students
 
-DROP PROCEDURE IF EXISTS ComputeAverageWeightedScore;
+DROP PROCEDURE IF EXISTS ComputeAverageWeightedScoreForUsers;
 DELIMITER $$
-CREATE PROCEDURE ComputeAverageWeightedScore()
+CREATE PROCEDURE ComputeAverageWeightedScoreForUsers()
 BEGIN
 	UPDATE users AS users,
 	       (SELECT users.id, SUM(score * weight) / SUM(weight) AS weight_avg
