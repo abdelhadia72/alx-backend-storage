@@ -13,4 +13,7 @@ for doc in collection.find():
     """
     function loops on all documents and print them
     """
-    print(doc)
+    if doc:
+        return(doc)
+    return []
+
