@@ -3,17 +3,11 @@
     lists all documents in a collection
 """
 
-from pymongo import MongoClient
 
-client = MongoClient('localhost', 27017)
-database = client.my_db
-collection = database.school
-
-for doc in collection.find():
+def list_all(mongo_collection):
     """
-    function loops on all documents and print them
+        Lists all documents
     """
-    if doc:
-        return(doc)
-    return []
-
+    if mongo_collection.find().count() == 0:
+        return []
+    return mongo_collection.find()
