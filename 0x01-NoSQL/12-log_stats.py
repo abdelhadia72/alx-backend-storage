@@ -4,31 +4,28 @@
 from pymongo import MongoClient
 
 
-def log_stats():
-    """ Python script that provides some stats
-    about Nginx logs stored in MongoDB """
+def log_stats(nginx_collection):
+    """
+        Python script that provides some
+        stats about Nginx logs stored in MongoDB
+    """
+
+    print("{} logs".format(nginx_collection.count_documents({})))
+    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
+    print("Methods:")
+    for method in methods:
+        count_method = nginx_collection.count_documents({"method": method})
+        print("\tmethod {}: {}".format(method, count_method))
+    path_status = nginx_collection.count_documents({"path": "/status"})
+    print("{} status check".format(path_status))
+
+
+def connected_to_mongo():
+    """ Connects to MongoDB """
     client = MongoClient('mongodb://127.0.0.1:27017')
     nginx_collection = client.logs.nginx
-
-    total_logs = nginx_collection.count_documents({})
-
-    methods_count = {
-        "GET": nginx_collection.count_documents({"method": "GET"}),
-        "POST": nginx_collection.count_documents({"method": "POST"}),
-        "PUT": nginx_collection.count_documents({"method": "PUT"}),
-        "PATCH": nginx_collection.count_documents({"method": "PATCH"}),
-        "DELETE": nginx_collection.count_documents({"method": "DELETE"})
-    }
-
-    status_check_count = nginx_collection.count_documents(
-        {"method": "GET", "path": "/status"})
-
-    print(f"{total_logs} logs")
-    print("Methods:")
-    for method, count in methods_count.items():
-        print(f"\tmethod {method}: {count}")
-    print(f"{status_check_count} status check")
+    log_stats(nginx_collection)
 
 
 if __name__ == "__main__":
-    log_stats()
+    connected_to_mongo()
