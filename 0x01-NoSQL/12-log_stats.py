@@ -26,5 +26,6 @@ def connected_to_mongo():
     nginx_collection = client.logs.nginx
     log_stats(nginx_collection)
 
+
 if __name__ == "__main__":
-    log_stats()
+    connected_to_mongo()
