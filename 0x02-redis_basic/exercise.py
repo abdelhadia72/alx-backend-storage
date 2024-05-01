@@ -13,7 +13,8 @@ def count_calls(method: Callable) -> Callable:
 
     @wraps(method)
     def wrapper(self: Any, *args, **kwargs) -> str:
-        """Wraps called method and increments call count in Redis before execution"""
+        """Wraps called method and increments
+        call count in Redis before execution"""
         self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
 
@@ -21,11 +22,13 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
-    """Decorator for Cache class method to track arguments and outputs"""
+    """Decorator for Cache class method
+    to track arguments and outputs"""
 
     @wraps(method)
     def wrapper(self: Any, *args) -> str:
-        """Wraps called method and tracks its passed arguments by storing them in Redis"""
+        """Wraps called method and tracks
+        its passed arguments by storing them in Redis"""
         self._redis.rpush(f'{method.__qualname__}:inputs', str(args))
         output = method(self, *args)
         self._redis.rpush(f'{method.__qualname__}:outputs', output)
@@ -68,7 +71,8 @@ class Cache:
         return key
 
     def get(self, key: str, fn: Optional[Callable] = None) -> Any:
-        """Gets key's value from Redis and converts result byte into correct data type"""
+        """Gets key's value from Redis and
+        converts result byte into correct data type"""
         client = self._redis
         value = client.get(key)
         if not value:
