@@ -54,3 +54,14 @@ class Cache:
             get method for cache
         """
         return self.get(key, fn=int)
+
+    def count_calls(method: callable) -> callable:
+        """
+            count calls
+        """
+        key = method.__qualname__
+
+        def wrapper(self, *args, **kwargs):
+            self._redis.incr(key)
+            return method(self, *args, **kwargs)
+        return wrapper
